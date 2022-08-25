@@ -43,8 +43,9 @@ module.exports = {
         const result = await elasticClient.search({
           index: 'thesis',
           query: {
-            match: { content: req.query.text },
+            match_phrase: { content: req.query.text },
           },
+          allow_partial_search_results: false,
         });
         resolve(result);
       } catch (err) {
