@@ -86,7 +86,7 @@ module.exports = {
       if (!lang || parseInt(lang) === 0) {
         arr = thesisText.split('. ');
       } else {
-        arr = thesisText.split('| ');
+        arr = thesisText.split('। ');
       }
 
       arr.forEach((el) => {

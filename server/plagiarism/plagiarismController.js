@@ -6,9 +6,10 @@ const responseMessage = require('../utils/responseMessage');
 
 function preprocessText(thesisText, referText, lang) {
   let thesisdata, referdata;
+  console.log(lang);
   if (lang) {
-    thesisdata = thesisText.split('| ');
-    referdata = referText.split('| ');
+    thesisdata = thesisText.split('। ');
+    referdata = referText.split('। ');
   } else {
     thesisdata = thesisText.split('. ');
     referdata = referText.split('. ');
@@ -96,7 +97,7 @@ module.exports = {
     try {
       let thesisText = await plagiarismService.fetchData(req.body);
       const referText = req.body.referText;
-      const lang = req.query.lang || 0;
+      const lang = Number(req.query.lang) || 0;
       if (referText) {
         thesisText = preprocessText(thesisText, referText, lang);
       }
