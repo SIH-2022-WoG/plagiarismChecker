@@ -4,6 +4,21 @@ const plagiarismService = require('./plagiarismService');
 const responseHelper = require('../utils/responseHelper');
 const responseMessage = require('../utils/responseMessage');
 
+function preprocessText(thesisText, referText) {
+  const thesisdata = thesisText.split('\n');
+  const referdata = referText.split('\n');
+  const hash = new Set();
+  referdata.forEach((el) => hash.add(el));
+  const formattedText = [];
+  thesisdata.forEach((el) => {
+    if (!hash.has(el)) {
+      formattedText.push(el);
+    }
+  });
+  const ans = formattedText.join('\n');
+  return ans;
+}
+
 module.exports = {
   createIndex: async (req, res) => {
     let response;
@@ -72,7 +87,11 @@ module.exports = {
   calculateReport: async (req, res) => {
     let response;
     try {
-      const thesisText = await plagiarismService.fetchData(req.body);
+      let thesisText = await plagiarismService.fetchData(req.body);
+      const referText = req.body.referText;
+      if (referText) {
+        thesisText = preprocessText(thesisText, referText);
+      }
       req.body.thesisText = thesisText;
       const results = await plagiarismService.calculatePlagiarism(req.body);
       let lines = 0;
