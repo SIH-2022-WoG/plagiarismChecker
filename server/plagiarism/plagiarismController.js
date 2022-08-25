@@ -6,6 +6,16 @@ const responseMessage = require('../utils/responseMessage');
 
 module.exports = {
   createIndex: async (req, res) => {
-    const data = plagiarismService.fetchData(req.body);
+    let response;
+    try {
+      const data = await plagiarismService.fetchData(req.body);
+      response = new responseMessage.GenericSuccessMessage();
+      response.data = data;
+      return responseHelper(null, res, response, response.code);
+    } catch (err) {
+      console.log(err);
+      response = new responseMessage.GenericFailureMessage();
+      return responseHelper(null, res, response, response.code);
+    }
   },
 };
