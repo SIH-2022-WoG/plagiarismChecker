@@ -17,6 +17,10 @@ plagiarismRouter.get('/search/partial', (req, res, next) => {
   plagiarismController.partialSearch(req, res);
 });
 
+plagiarismRouter.post('/calculate', (req, res, next) => {
+  plagiarismController.calculateReport(req, res);
+});
+
 module.exports = {
   plagiarismRouter,
 };
