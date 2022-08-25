@@ -7,6 +7,9 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const fileUrl = body.fileUrl;
+        if (!fileUrl) {
+          reject('please send file url');
+        }
         const response = await fetch(fileUrl);
         const data = await response.text();
         return resolve(data);
@@ -66,6 +69,27 @@ module.exports = {
           allow_partial_search_results: true,
         });
         resolve(result);
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  },
+
+  calculatePlagiarism: async (body) => {
+    return new Promise(async (resolve, reject) => {
+      const { thesisText } = body;
+      const arr = thesisText.split('\n');
+      const searches = [];
+      arr.forEach((el) => {
+        searches.push({ index: 'thesis' });
+        searches.push({ query: { match_phrase: { content: el } } });
+      });
+      try {
+        const searchResults = await elasticClient.msearch({
+          searches,
+        });
+        resolve(searchResults.responses);
       } catch (err) {
         console.log(err);
         reject(err);
