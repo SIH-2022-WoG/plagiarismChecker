@@ -10,6 +10,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 const { promisify } = require('util');
+const { Client } = require('@elastic/elasticsearch');
+
 const app = (module.exports = express());
 
 // dont add any config before this line
@@ -25,6 +27,13 @@ app.use(cookieParser());
 
 // Compress all routes and the response.
 app.use(compression());
+
+const elasticClient = new Client({
+  cloud: { id: process.env.ELASTIC_ID },
+  auth: { apiKey: process.env.ELASTIC_API_KEY },
+});
+
+global.elasticClient = elasticClient;
 
 // Helmet helps you secure your Express apps by setting various HTTP headers
 app.use(helmet());
