@@ -4,9 +4,17 @@ const plagiarismService = require('./plagiarismService');
 const responseHelper = require('../utils/responseHelper');
 const responseMessage = require('../utils/responseMessage');
 
-function preprocessText(thesisText, referText) {
-  const thesisdata = thesisText.split('\n');
-  const referdata = referText.split('\n');
+function preprocessText(thesisText, referText, lang) {
+  let thesisdata, referdata;
+  console.log(lang);
+  if (lang) {
+    thesisdata = thesisText.split('। ');
+    referdata = referText.split('। ');
+  } else {
+    thesisdata = thesisText.split('. ');
+    referdata = referText.split('. ');
+  }
+
   const hash = new Set();
   referdata.forEach((el) => hash.add(el));
   const formattedText = [];
@@ -89,11 +97,12 @@ module.exports = {
     try {
       let thesisText = await plagiarismService.fetchData(req.body);
       const referText = req.body.referText;
+      const lang = Number(req.query.lang) || 0;
       if (referText) {
-        thesisText = preprocessText(thesisText, referText);
+        thesisText = preprocessText(thesisText, referText, lang);
       }
       req.body.thesisText = thesisText;
-      const results = await plagiarismService.calculatePlagiarism(req.body);
+      const results = await plagiarismService.calculatePlagiarism(req);
       let lines = 0;
       let count = 0;
       const plagReport = {};
