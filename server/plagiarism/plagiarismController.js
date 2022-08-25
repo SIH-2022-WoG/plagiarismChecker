@@ -23,8 +23,42 @@ module.exports = {
 
   exactSearchs: async (req, res) => {
     let response;
+    const phrase = req.query.text;
+    if (!phrase) {
+      return responseHelper(
+        null,
+        res,
+        responseMessage.incorrectPayload,
+        parseInt(responseMessage.incorrectPayload.code)
+      );
+    }
+
     try {
       const searchResult = await plagiarismService.exactSearchs(req);
+      response = new responseMessage.GenericSuccessMessage();
+      response.data = searchResult;
+      return responseHelper(null, res, response, response.code);
+    } catch (err) {
+      console.log('Error in searchController', err);
+      response = new responseMessage.GenericFailureMessage();
+      return responseHelper(null, res, response, response.code);
+    }
+  },
+
+  partialSearch: async (req, res) => {
+    let response;
+    const phrase = req.query.text;
+    if (!phrase) {
+      return responseHelper(
+        null,
+        res,
+        responseMessage.incorrectPayload,
+        parseInt(responseMessage.incorrectPayload.code)
+      );
+    }
+
+    try {
+      const searchResult = await plagiarismService.partialSearch(req);
       response = new responseMessage.GenericSuccessMessage();
       response.data = searchResult;
       return responseHelper(null, res, response, response.code);

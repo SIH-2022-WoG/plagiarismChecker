@@ -54,4 +54,22 @@ module.exports = {
       }
     });
   },
+
+  partialSearch: (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await elasticClient.search({
+          index: 'thesis',
+          query: {
+            match: { content: req.query.text },
+          },
+          allow_partial_search_results: true,
+        });
+        resolve(result);
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  },
 };

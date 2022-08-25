@@ -13,6 +13,10 @@ plagiarismRouter.get('/search/exact', (req, res, next) => {
   plagiarismController.exactSearchs(req, res);
 });
 
+plagiarismRouter.get('/search/partial', (req, res, next) => {
+  plagiarismController.partialSearch(req, res);
+});
+
 module.exports = {
   plagiarismRouter,
 };
