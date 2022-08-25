@@ -28,10 +28,28 @@ module.exports = {
             title: body.title,
           },
         });
+        await elasticClient.indices.refresh({ index: 'thesis' });
         resolve(result);
       } catch (err) {
         console.log('Error in createIndex service :::: ', err);
         return reject(err);
+      }
+    });
+  },
+
+  searchIndex: (req) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await elasticClient.search({
+          index: 'thesis',
+          query: {
+            match: { content: req.query.text },
+          },
+        });
+        resolve(result);
+      } catch (err) {
+        console.log(err);
+        reject(err);
       }
     });
   },

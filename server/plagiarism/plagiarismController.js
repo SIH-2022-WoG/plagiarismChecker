@@ -20,4 +20,18 @@ module.exports = {
       return responseHelper(null, res, response, response.code);
     }
   },
+
+  searchIndices: async (req, res) => {
+    let response;
+    try {
+      const searchResult = await plagiarismService.searchIndex(req);
+      response = new responseMessage.GenericSuccessMessage();
+      response.data = searchResult;
+      return responseHelper(null, res, response, response.code);
+    } catch (err) {
+      console.log('Error in searchController', err);
+      response = new responseMessage.GenericFailureMessage();
+      return responseHelper(null, res, response, response.code);
+    }
+  },
 };
