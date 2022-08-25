@@ -37,7 +37,7 @@ module.exports = {
     });
   },
 
-  searchIndex: (req) => {
+  exactSearchs: (req) => {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await elasticClient.search({

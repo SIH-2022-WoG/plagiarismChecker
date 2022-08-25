@@ -21,10 +21,10 @@ module.exports = {
     }
   },
 
-  searchIndices: async (req, res) => {
+  exactSearchs: async (req, res) => {
     let response;
     try {
-      const searchResult = await plagiarismService.searchIndex(req);
+      const searchResult = await plagiarismService.exactSearchs(req);
       response = new responseMessage.GenericSuccessMessage();
       response.data = searchResult;
       return responseHelper(null, res, response, response.code);
