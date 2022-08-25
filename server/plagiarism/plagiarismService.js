@@ -76,11 +76,19 @@ module.exports = {
     });
   },
 
-  calculatePlagiarism: async (body) => {
+  calculatePlagiarism: async (req) => {
     return new Promise(async (resolve, reject) => {
+      const body = req.body;
       const { thesisText } = body;
-      const arr = thesisText.split('\n');
       const searches = [];
+      const lang = req.query.lang;
+      let arr;
+      if (!lang || parseInt(lang) === 0) {
+        arr = thesisText.split('. ');
+      } else {
+        arr = thesisText.split('| ');
+      }
+
       arr.forEach((el) => {
         searches.push({ index: 'thesis' });
         searches.push({ query: { match_phrase: { content: el } } });
