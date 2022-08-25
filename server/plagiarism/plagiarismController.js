@@ -8,9 +8,11 @@ module.exports = {
   createIndex: async (req, res) => {
     let response;
     try {
-      const data = await plagiarismService.fetchData(req.body);
+      const thesisText = await plagiarismService.fetchData(req.body);
+      req.body.thesisText = thesisText;
+      const elasticResult = await plagiarismService.createIndex(req.body);
       response = new responseMessage.GenericSuccessMessage();
-      response.data = data;
+      response.data = elasticResult;
       return responseHelper(null, res, response, response.code);
     } catch (err) {
       console.log(err);

@@ -16,4 +16,23 @@ module.exports = {
       }
     });
   },
+
+  createIndex: (body) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await elasticClient.index({
+          index: 'thesis',
+          document: {
+            thesisId: body.thesisId,
+            content: body.thesisText,
+            title: body.title,
+          },
+        });
+        resolve(result);
+      } catch (err) {
+        console.log('Error in createIndex service :::: ', err);
+        return reject(err);
+      }
+    });
+  },
 };
