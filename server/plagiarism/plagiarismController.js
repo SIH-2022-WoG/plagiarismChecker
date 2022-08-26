@@ -3,6 +3,7 @@
 const plagiarismService = require('./plagiarismService');
 const responseHelper = require('../utils/responseHelper');
 const responseMessage = require('../utils/responseMessage');
+const fs = require('fs');
 
 function preprocessText(thesisText, referText, lang) {
   let thesisdata, referdata;
@@ -123,5 +124,25 @@ module.exports = {
       response = new responseMessage.GenericFailureMessage();
       return responseHelper(null, res, response, response.code);
     }
+  },
+
+  check: async (req, res) => {
+    console.log(__dirname);
+    const filename = req.fn;
+    const data = fs.readFileSync(__dirname + '/' + filename, {
+      encoding: 'utf8',
+      flag: 'r',
+    });
+    // console.log(data);
+    console.log('done');
+    const body = {
+      thesisText: data,
+      thesisId: 'ayurText',
+      title: 'ayush',
+    };
+    const result = await plagiarismService.createIndex(body);
+    const response = new responseMessage.GenericSuccessMessage();
+    response.result = result;
+    return responseHelper(null, res, response, response.code);
   },
 };
