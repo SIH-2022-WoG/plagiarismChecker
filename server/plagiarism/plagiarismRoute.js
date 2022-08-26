@@ -21,6 +21,10 @@ plagiarismRouter.post('/calculate', (req, res, next) => {
   plagiarismController.calculateReport(req, res);
 });
 
+plagiarismRouter.post('/file/upload', (req, res, next) => {
+  plagiarismController.check(req, res);
+});
+
 module.exports = {
   plagiarismRouter,
 };
